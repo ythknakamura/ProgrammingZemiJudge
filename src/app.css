@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+/*@plugin '@tailwindcss/typography';*/
+
+@theme {
+    --color-primary:#2e628c;
+    --color-onPrimary:#ffffff;
+    --color-container:#cee5ff;
+    --color-onContainer:#0d4a73;
+    --color-surface:#f7f9ff;
+    --color-onSurface:#181C20;
+    --color-outline: #72777F;
+    --color-iabox:#dee3ea;
+}
+@layer components{
+    body{
+        @apply bg-surface text-onSurface;
+    }
+    h2{
+        @apply text-2xl font-extrabold;
+    }
+    h3{
+        @apply text-lg font-extrabold;
+    }
+    h4{
+        @apply text-sm font-bold;
+    }
+    :where(h2, h3, h4) + div{
+        @apply ps-4;
+    }
+    hr{
+        @apply my-4 border-outline/50 border-1;
+    }
+    li{
+        @apply list-disc list-inside;
+    }
+    .button{
+        @apply bg-primary hover:opacity-80 cursor-pointer text-onPrimary px-4 py-1 rounded-full text-sm 
+            shadow shadow-gray-800;
+        &:disabled{
+            @apply bg-outline/50 text-onSurface/50 cursor-not-allowed;
+        }
+    }
+    .result-table{
+        @apply border-collapse border-1 border-outline table-fixed text-center;
+        thead th{
+            @apply w-[10rem] py-1 border border-outline bg-primary text-onPrimary;
+        }
+        tbody td{
+            @apply py-1 border border-outline;
+        }
+        tbody > tr:nth-child(even){
+            @apply bg-iabox/50;
+        }
+        tfoot > tr {
+            @apply py-2 border border-outline  bg-container text-onContainer font-bold;
+        }
+        tfoot td{
+            @apply py-1 border border-outline ;
+        }
+    }
+    .daily-table{
+        @apply grid grid-cols-[5rem_auto_5rem_5rem] w-4/5 border-collapse text-center;
+        td {
+            @apply block py-1  border-outline;
+        }
+        tbody,tr{
+            @apply contents;
+        }
+    }
+    .score-table{
+        @apply border-collapse border-1 border-outline table-fixed text-center;
+        thead th{
+            @apply py-1 border border-outline bg-primary text-onPrimary;
+        }
+        tbody td{
+            @apply py-1 border border-outline;
+        }
+    }
+}
+
+@source "../node_modules/flowbite-svelte/dist";
