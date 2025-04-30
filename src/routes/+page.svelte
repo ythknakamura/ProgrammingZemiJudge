@@ -3,8 +3,8 @@
     import {currentStudent} from '$lib/state.svelte';
     import {signIn, isAdmin, fetchMyBestResults} from '$lib/database';
     const emailpostfix = "@kenryo.ed.jp";
-    let account:string = $state("admin");
-    let password:string = $state("123456");
+    let account:string = $state("");
+    let password:string = $state("");
 
     async function login(){
         const email = account + emailpostfix;
