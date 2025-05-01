@@ -6,6 +6,10 @@
 	const {children} = $props();
 </script>
 
+<svelte:head>
+	<title>縣陵プログラミング講座2025</title>
+</svelte:head>
+
 <div class="bg-container text-onContainer py-2 px-8 gap-8
 	items-center grid grid-cols-[1fr_auto_auto] grid-flow-cols">
 	<div class="text-lg">縣陵プログラミング講座2025</div>

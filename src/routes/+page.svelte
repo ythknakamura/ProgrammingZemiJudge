@@ -25,7 +25,8 @@
 </script>
 
 <div class="flex flex-col items-center mt-20 gap-8">
-    <h1 class="text-4xl font-bold mb-4">縣陵プログラミング講座2025</h1>
+    <h1 class="text-4xl font-bold">縣陵プログラミング講座2025</h1>
+    <p class="text-3xl font-bold mb-4">ジャッジシステム</p>
     <div class="flex flex-col gap-4">
         <label>アカウント:
             <input type="text" bind:value={account} class="border w-[10rem] p-1 rounded" /> @kenryo.ed.jp
