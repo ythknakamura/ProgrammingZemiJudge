@@ -1,7 +1,9 @@
-import "https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.js";
+import {loadPyodide} from "https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.mjs";
 import type {ResultStatus} from "./setting";
 export type RunRequest = {code:string, input:string[]};
 export type RunResponse = {status: ResultStatus, output:string[]};
+
+const pyodideReadyPromise = loadPyodide();
 
 type Pyodide  =  { 
     runPython: (code: string, globals?:any) => string,
@@ -41,7 +43,7 @@ self.onmessage = async(message: MessageEvent) => {
     }
     else if(message.data[0] === "init"){
         console.log("worker:初期化")
-        pyodide = await loadPyodide();
+        pyodide = await pyodideReadyPromise;
         self.postMessage({status: "INIT"});
     }
     else{
