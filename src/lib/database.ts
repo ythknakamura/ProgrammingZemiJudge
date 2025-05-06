@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDoc, getDocs, setDoc, addDoc, doc, 
-    serverTimestamp,query, where, orderBy, collectionGroup} from "firebase/firestore/lite";
+    serverTimestamp,query, where, orderBy, collectionGroup,limit} from "firebase/firestore/lite";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import type {TaskData, ResultStatus, MyResult, StudentInfo} from "./setting";
 import {currentStudent, myBest} from '$lib/state.svelte';
@@ -157,6 +157,29 @@ export async function fetchMyResults(day:string, task:string): Promise<MyResult[
         } 
     });
     return results;
+}
+
+export async function fetchCode(taskKey:string, studentID:string):Promise<MyResult|undefined>{
+    const submitRef = collection(db, Col.submitLog);
+    const q = query(submitRef, 
+        where("studentID", "==", studentID), 
+        where("taskKey", "==", taskKey),
+        orderBy("date", "desc"),
+        limit(1));
+    const snapshot = await getDocs(q);
+    let result: MyResult|undefined;
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        if(["AC", "WA", "TLE", "RE"].includes(data.status)){
+            result = {
+                code:data.code, 
+                status:data.status,
+                date: formatTimeStamp(data.date.toDate(), false),
+                executionTime:data.executionTime
+            };
+        }
+    });
+    return result;
 }
 
 

@@ -2,12 +2,25 @@
     import {goto} from '$app/navigation';
     import StatusBadge from '$lib/StatusBadge.svelte';
     import {type ResultStatus, type StudentInfo} from '$lib/setting';
-    import {fetchAllUsersData, allTaskHeadPromise, getTaskKey} from '$lib/database';
+    import {fetchAllUsersData, allTaskHeadPromise, getTaskKey, fetchCode} from '$lib/database';
+    import CodeMirror from 'svelte-codemirror-editor';
+    import {python} from '@codemirror/lang-python';
 
-    let daystr = $state("day04");
+    let code: string = $state("");
+    let daystr = $state("");
     let allUsersData: StudentInfo[] = $state([]);
     let tableHead: string[] = $state([]);
     let matrix:  { [taskKey:string]: ResultStatus } [] = $state([]);
+
+    async function badgeClicked(taskKey: string, studentID: string) {
+        const codeResult = await fetchCode(taskKey, studentID);
+        if (codeResult){
+            code = codeResult.code;
+        }
+        else{
+            code = "";
+        }
+    }
 
     async function confirmStatus() {
         allUsersData = await fetchAllUsersData();
@@ -57,9 +70,18 @@
                 <td>{user.studentID}</td>
                 <td>{user.displayName}</td>
                 {#each tableHead as taskKey}
-                    <td><StatusBadge status={row[taskKey]} /></td>
+                    <td><button onclick={()=>{badgeClicked(taskKey, user.studentID)}} >
+                        <StatusBadge status={row[taskKey]}/>
+                    </button></td>
                 {/each}
             </tr>
         {/each}
     </tbody>
 </table>
+
+<div class="my-4 border-1 border-onContainer rounded-md p-1 text-base min-h-[5lh]">
+    <CodeMirror bind:value={code} readonly={true}
+        lineWrapping={true}
+        lang={python()}
+    />
+</div>
