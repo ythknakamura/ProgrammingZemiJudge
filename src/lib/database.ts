@@ -15,8 +15,6 @@ const firebaseConfig = {
     appId: PUBLIC_APP_ID,
 };
 
-export const isAdmin = () => currentStudent.email === "admin@kenryo.ed.jp";
-
 export type TaskHead = {day:string, task:string, title:string};
 export type AllTaskHead =  { [daystr:string]:TaskHead[] };
 export const getTaskKey = (day:string, task:string) => `${day}-${task}`;
@@ -45,14 +43,20 @@ export async function signIn(email:string, password:string):Promise<void> {
         const uid = userCredential.user.uid;
         const userData  = await getDoc(doc(db, Col.user, uid));
         const data = userData.data();
-        currentStudent.uid = uid;
-        currentStudent.email = email;
-        currentStudent.studentID = data!.studentID;
-        currentStudent.displayName = data!.displayName;
-        await addDoc(collection(db, Col.loginLog), {
-            date: serverTimestamp(),
-            ...currentStudent,
-        });
+        if(data){
+            currentStudent.uid = uid;
+            currentStudent.email = email;
+            currentStudent.studentID = data.studentID;
+            currentStudent.displayName = data.displayName;
+            currentStudent.isAdmin = data.isAdmin===true;
+            await addDoc(collection(db, Col.loginLog), {
+                date: serverTimestamp(),
+                ...currentStudent,
+            });
+        }
+        else{
+            throw new Error("User data not found");
+        }
     }
     catch (error) {
         console.error("Error signing in:", error);
@@ -71,6 +75,7 @@ export async function addUser(studentID:string, displayName:string, email:string
         displayName,
         email,
         uid,
+        isAdmin:false,
     });
 }
 

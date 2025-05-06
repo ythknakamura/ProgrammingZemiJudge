@@ -1,7 +1,7 @@
 <script lang="ts">
     import {goto} from '$app/navigation';
     import {currentStudent} from '$lib/state.svelte';
-    import {signIn, isAdmin, fetchMyBestResults} from '$lib/database';
+    import {signIn, fetchMyBestResults} from '$lib/database';
     const emailpostfix = "@kenryo.ed.jp";
     let account:string = $state("");
     let password:string = $state("");
@@ -13,7 +13,7 @@
         if(currentStudent.uid == ""){
             alert("ログインに失敗しました。\nアカウントが登録されていないか、パスワードが違います。");
         }
-        else if(isAdmin()){
+        else if(currentStudent.isAdmin){
             await fetchMyBestResults();
             goto("/admin");
         }

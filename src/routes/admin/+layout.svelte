@@ -1,14 +1,13 @@
 <script lang="ts">
     import {goto} from '$app/navigation';
-    import {currentStudent, } from '$lib/state.svelte';
-    import {isAdmin} from '$lib/database';
+    import {currentStudent} from '$lib/state.svelte';
     const {children} = $props();
 
     if(currentStudent.uid === "") {
         alert("ログインしてください");
         goto("/");
     }
-    else if(!isAdmin()) {
+    else if(!currentStudent.isAdmin) {
         alert("管理者権限がありません");
         goto("/");
     }

@@ -34,6 +34,7 @@ export type Student = {
     studentID : string;
     displayName : string;
     email : string;
+    isAdmin : boolean;
 };
 
 export type MyResult = {

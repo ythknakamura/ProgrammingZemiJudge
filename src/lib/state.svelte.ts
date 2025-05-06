@@ -5,6 +5,7 @@ export const currentStudent = $state({
     displayName: "",
     email: "",
     uid: "",
+    isAdmin: false,
 } as Student);
 
 export const myBest= $state({} as {[taskStr:string]: Best});

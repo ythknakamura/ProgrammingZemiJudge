@@ -24,6 +24,11 @@
 				<Icon icon="mdi:list-box" class="text-3xl hover:opacity-80"/>
 			</a>
 		{/if}
+		{#if currentStudent.isAdmin}
+			<a href="/admin">
+				<Icon icon="mdi:shield-account" class="text-3xl hover:opacity-80"/>
+			</a>
+		{/if}
 	</nav>
 	<p>{currentStudent.displayName}</p>
 </div>

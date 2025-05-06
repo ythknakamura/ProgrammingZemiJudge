@@ -2,9 +2,9 @@
     import {goto} from '$app/navigation';
     import StatusBadge from '$lib/StatusBadge.svelte';
     import {type ResultStatus, type StudentInfo} from '$lib/setting';
-    import {fetchAllUsersData} from '$lib/database';
+    import {fetchAllUsersData, allTaskHeadPromise, getTaskKey} from '$lib/database';
 
-    let day = $state("01");
+    let daystr = $state("day04");
     let allUsersData: StudentInfo[] = $state([]);
     let tableHead: string[] = $state([]);
     let matrix:  { [taskKey:string]: ResultStatus } [] = $state([]);
@@ -19,13 +19,10 @@
                 matrix[idx][taskKey] = status;
             }
         }
+        const allTaskHead = await allTaskHeadPromise;
         tableHead = [];
-        for(const data of allUsersData) {
-            for(const taskKey of Object.keys(data.best)) {
-                if(!tableHead.includes(taskKey)) {
-                    tableHead.push(taskKey);
-                }
-            }
+        for(const taskKey of allTaskHead[daystr]) {
+            tableHead.push(getTaskKey(taskKey.day, taskKey.task));
         }
     }
     confirmStatus();
@@ -33,7 +30,10 @@
 <div class="flex flex-row gap-8 p-4">
     <button class="button" onclick={() => goto('/dashboard')}>dashboard</button>
     <button class="button" onclick={confirmStatus}>成績更新</button>
-    <div class="w-36"></div>
+    <label>日にち
+        <input type="text" bind:value={daystr} class="border w-18 px-1"/>
+    </label>
+    <div class="w-18"></div>
     <button class="button" onclick={() => goto('/admin/registerTask')}>課題設定</button>
     <button class="button" onclick={() => goto('/admin/registerUser')}>ユーザ登録</button>
 </div>
